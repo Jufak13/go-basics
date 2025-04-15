@@ -9,4 +9,5 @@ func main() {
 	naloge.NalogeIzPrintanja()
 	fmt.Println("----------")
 	naloge.NalogeIzConditionals()
+	naloge.NalogeIzLoops()
 }

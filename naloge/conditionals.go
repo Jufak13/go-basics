@@ -11,7 +11,7 @@ func NalogeIzConditionals() {
 	// x := true
 
 	x := true
-	if x == true {
+	if x {
 		fmt.Println("1. x je true")
 	} else {
 		fmt.Println("1. x je false")
@@ -464,6 +464,5 @@ func NalogeIzConditionals() {
 			case "3": 
 				fmt.Println("Exit")
 		}
-
 
 }
