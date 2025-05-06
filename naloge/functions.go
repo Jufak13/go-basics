@@ -2,6 +2,7 @@ package naloge
 
 import (
 	"fmt"
+	"math"
 )
 
 func NalogeIzFunctions() {
@@ -445,5 +446,123 @@ func IsLeapYear(year int) bool {
 }
 
 
-// 16 Write a function `Fibonacci` that generates and returns the first `n` Fibonacci numbers in a slice. Use a `for` loop and handle `n` less than 2 with a conditional.
-// n int
+	// 16 Write a function `Fibonacci` that generates and returns the first `n` Fibonacci numbers in a slice. Use a `for` loop and handle `n` less than 2 with a conditional.
+	// n int
+
+
+
+func Fibonacci(fib int) ([]int, error) {
+
+	if fib <= 0 {
+		return nil, fmt.Errorf("invalid n")
+	}
+
+	if fib == 1 {
+		return []int{0}, nil
+	}
+
+	if fib == 0 {
+		return []int{0}, nil
+	}
+
+	out := []int{0, 1}
+
+	for i := 2; i < fib; i++ {
+		out = append(out, out[len(out)-2] + out[len(out)-1])
+	}
+	return out, nil
+}
+
+	// 17 Write a function `SumDigits` that computes the sum of digits of a non‑negative integer. Use a loop dividing by 10 and adding `n % 10` each iteration.
+	// n int
+
+	func SumDigits(a int) (int, error) {
+		if a < 0 {
+			return -1, fmt.Errorf("invalid n")
+		}
+		if a < 10 {
+			return a, nil
+		}
+
+		sum := 0
+
+		for {
+			currentDigit := a % 10
+			a /= 10
+			sum += currentDigit
+			if a == 0 {
+				break
+			}
+		}
+		return sum, nil
+	}
+
+	// 18 Write a function `IsArmstrong` that checks whether a number is an Armstrong number (sum of its own digits each raised to the power of the number of digits). Loop to compute digit powers and compare.
+	// n int
+
+	func IsArmstrong(a int) (bool, error) {
+		if a <= 0 {
+			return false, fmt.Errorf("invalid input")
+		}
+
+		arms := 0
+		stevke := []int{}
+		n := a
+
+		for a != 0 {
+			stevke = append(stevke, a%10)
+			a /= 10
+		}
+
+		for _, stevka := range stevke {
+			arms += int(math.Pow(float64(stevka), float64(len(stevke))))
+		}
+
+		return arms == n, nil
+	}
+
+	// 19 Write a function `MultiplicationTable` that returns a slice of ints representing `n × 1` through `n × 10`. Use a loop from 1 to 10 and multiply.
+	// n int
+
+	func MultiplicationTable(a int, b int) ([]int, error) {		
+		if b < 1 {
+			return nil, fmt.Errorf("invalid input")
+		}
+
+		tabela := []int{}
+		
+		for i := 1; i <= b; i++ {
+			tabela = append(tabela, a*i)
+		}
+		return tabela, nil
+	}
+
+	// 20 Write a function `CountSubstring` that counts how many times `substr` appears in `s`. Loop stepping one rune at a time and use `if` with `strings.HasPrefix`.
+	// s string
+	// substr string
+
+	func CountSubstring(beseda string, podbeseda string) (int, error)
+
+	// 21 Write a function `GCD` that computes the greatest common divisor of `a` and `b` using the Euclidean algorithm. Loop while `b` is not zero, swap and compute `a % b`.
+	// a int
+	// b int
+
+	// 22 Write a function `LCM` that computes the least common multiple of `a` and `b`. Use the formula `abs(a*b)/GCD(a,b)` and a conditional to handle zero.
+	// a int
+	// b int
+
+	// 23 Write a function `UniqueInts` that removes duplicate integers from a slice and returns a new slice. Loop over `nums`, use a map to track seen values, and append unseen.
+	// nums []int
+
+	// 24 Write a function `BubbleSort` that sorts a slice of integers using the bubble sort algorithm. Use nested loops and swap with a conditional `if nums[j] > nums[j+1]`.
+	// nums []int
+
+	// 25 Write a function `MergeSorted` that merges two sorted slices into one sorted slice. Use two indices, loop while both have elements, and compare to append.
+	// slice1 []int
+	// slice2 []int
+
+	// 26 Write a function `SumMatrix` that sums all elements in a 2D slice (matrix). Use nested loops: outer for rows, inner for columns, add each value.
+	// matrix [][]int
+
+	// 27 Write a function `MainDiagonal` that returns the main diagonal elements of a square matrix as a slice. Loop once using index `i` and append `matrix[i][i]`.
+	// matrix [][]int

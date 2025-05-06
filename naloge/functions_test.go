@@ -483,7 +483,6 @@ func TestFilterEven(t *testing.T) {
 	}
 }
 
-
 func TestCountVowels(t *testing.T) {
 	tests := map[string]struct {
 		input       string
@@ -512,7 +511,6 @@ func TestCountVowels(t *testing.T) {
 		})
 	}
 }
-
 
 func TestCountConsonants(t *testing.T) {
 	tests := map[string]struct {
@@ -547,7 +545,6 @@ func TestCountConsonants(t *testing.T) {
 	}
 }
 
-
 func TestIsLeapYear(t *testing.T) {
 	tests := map[string]struct {
 		input       int
@@ -577,6 +574,170 @@ func TestIsLeapYear(t *testing.T) {
 			actual := IsLeapYear(test.input)
 
 			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
+
+func TestFibonacci(t *testing.T) {
+	tests := map[string]struct {
+		input       int
+		expected    []int
+		errExpected error
+	}{
+		"happy path": {
+			input:    3,
+			expected: []int{0, 1, 1},
+		},
+		"invalid input": {
+			input:       -1,
+			expected:    nil,
+			errExpected: fmt.Errorf("invalid n"),
+		},
+		"1": {
+			input:    1,
+			expected: []int{0},
+		},
+		"0": {
+			input:    0,
+			expected: nil,
+			errExpected: fmt.Errorf("invalid n"),
+		},
+		"10": {
+			input:    10,
+			expected: []int{0, 1, 1, 2, 3, 5, 8, 13, 21, 34},
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := Fibonacci(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestSumDigits(t *testing.T) {
+	tests := map[string]struct {
+		input       int
+		expected    int
+		errExpected error
+	}{
+		"happy path": {
+			input:    123,
+			expected: 6,
+		},
+		"negative number": {
+			input:       -1,
+			expected:    -1,
+			errExpected: fmt.Errorf("invalid n"),
+		},
+		"one digit": {
+			input:    1,
+			expected: 1,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := SumDigits(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+
+func TestIsArmstrong(t *testing.T) {
+	tests := map[string]struct {
+		input       int
+		expected    bool
+		errExpected error
+	}{
+		"3 digit number": {
+			input:    153,
+			expected: true,
+		},
+		"4 digit number": {
+			input:       1634,
+			expected:    true,
+		},
+		"non-armstrong 3 digit": {
+			input:    123,
+			expected: false,
+		},
+		"non-armstrong 4 digit": {
+			input:    1234,
+			expected: false,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := IsArmstrong(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+
+func TestMultiplicationTable(t *testing.T) {
+	tests := map[string]struct {
+		input       int
+		input2		int
+		expected    []int
+		errExpected error
+	}{
+		"od 1 do 10": {
+			input:    3,
+			input2:		 10,
+			expected: []int{3, 6, 9, 12, 15, 18, 21, 24, 27, 30},
+		},
+		"poljubno": {
+			input:       2,
+			input2: 	4,
+			expected:    []int{2, 4, 6, 8},
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := MultiplicationTable(test.input, test.input2)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+
+				assert.Equal(t, test.expected, actual)
+			}
 		})
 	}
 }
