@@ -3,6 +3,7 @@ package naloge
 import (
 	"fmt"
 	"math"
+	"strings"
 )
 
 func NalogeIzFunctions() {
@@ -541,28 +542,111 @@ func Fibonacci(fib int) ([]int, error) {
 	// s string
 	// substr string
 
-	func CountSubstring(beseda string, podbeseda string) (int, error)
+	func CountSubstring(beseda string, podbeseda string) int {
+		counter := 0
+		for i := 0; i < len(beseda)-1; i++ {
+			if strings.HasPrefix(beseda[i:], podbeseda) {
+				counter++
+			}
+		}
+
+		return counter
+	}
 
 	// 21 Write a function `GCD` that computes the greatest common divisor of `a` and `b` using the Euclidean algorithm. Loop while `b` is not zero, swap and compute `a % b`.
 	// a int
 	// b int
 
+	func GCD(število1 int, število2 int) (int, error) {
+		if število2 == 0 || število1 == 0 {
+			return 0, fmt.Errorf("število2 cannot be zero")
+		}
+
+		for število2 !=0 {
+			c := število2
+			število2 = število1%število2
+			število1 = c
+		}
+
+		if število1 < 0 {
+			return -število1, nil
+		}
+		
+		return število1, nil
+	}
+
+
+
 	// 22 Write a function `LCM` that computes the least common multiple of `a` and `b`. Use the formula `abs(a*b)/GCD(a,b)` and a conditional to handle zero.
 	// a int
 	// b int
 
+	func LCM(a, b int) (int, error) {
+		gcd, err := GCD(a, b)
+		if err != nil {
+			return 0, err
+		}
+
+		abs := a * b
+		if abs < 0 {
+			abs = abs * -1
+		}
+
+		return abs / gcd, nil
+	}
+
 	// 23 Write a function `UniqueInts` that removes duplicate integers from a slice and returns a new slice. Loop over `nums`, use a map to track seen values, and append unseen.
 	// nums []int
+
+	func UniqueInts(nums []int) []int {
+		newList := []int{}
+		foundMap := map[int]bool{}
+		for _, num := range nums {
+			_, ok := foundMap[num] 
+			if !ok {
+				newList = append(newList, num)
+				foundMap[num] = true
+			}
+		} 
+
+		return newList
+}
+
 
 	// 24 Write a function `BubbleSort` that sorts a slice of integers using the bubble sort algorithm. Use nested loops and swap with a conditional `if nums[j] > nums[j+1]`.
 	// nums []int
 
+	func BubbleSort(nums []int) []int {
+		if len(nums) == 0 || len(nums) == 1 {
+			return nums
+		}
+
+		sortedIndex := len(nums)
+
+		for sortedIndex != 0 {
+			for i, j := 0, 1; j < sortedIndex; j++ {
+				if nums[i] > nums[j] {
+					tmp := nums[i]
+					nums[i] = nums[j]
+					nums[j] = tmp
+				}
+				i++
+		}
+		sortedIndex--
+	}
+		return nums
+}
+	
 	// 25 Write a function `MergeSorted` that merges two sorted slices into one sorted slice. Use two indices, loop while both have elements, and compare to append.
 	// slice1 []int
 	// slice2 []int
 
+	
+
 	// 26 Write a function `SumMatrix` that sums all elements in a 2D slice (matrix). Use nested loops: outer for rows, inner for columns, add each value.
 	// matrix [][]int
+
+
 
 	// 27 Write a function `MainDiagonal` that returns the main diagonal elements of a square matrix as a slice. Loop once using index `i` and append `matrix[i][i]`.
 	// matrix [][]int
