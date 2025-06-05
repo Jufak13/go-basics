@@ -634,6 +634,7 @@ func Fibonacci(fib int) ([]int, error) {
 		}
 		sortedIndex--
 	}
+
 		return nums
 }
 	
@@ -641,12 +642,77 @@ func Fibonacci(fib int) ([]int, error) {
 	// slice1 []int
 	// slice2 []int
 
-	
+	func MergeSorted(s1, s2 []int) []int {
+		s3 := []int{}
 
+		i := 0
+		j := 0
+
+		var currentMax int
+		if s1[0] > s2[0] {
+			currentMax = s2[0] - 1
+		} else {
+			currentMax = s1[0] - 1
+		}
+		for {
+			if i == len(s1) {
+				for _, item := range s2[j:] {
+					if item > currentMax {
+						s3 = append(s3, s2[j])
+						currentMax = s2[j]
+						j++
+					}
+				}
+				break
+			}
+			if j == len(s2) {
+				for _, item := range s1[i:] {
+					if item > currentMax {
+						s3 = append(s3, s1[i])
+						currentMax = s1[i]
+						i++
+					}
+				}
+				break
+			}
+			for s1[i] <= currentMax {
+				i++
+			}
+			for s2[j] <= currentMax {
+				j++
+			}
+			if s1[i] == s2[j] {
+				s3 = append(s3, s1[i])
+				currentMax = s1[i]
+				i++
+				j++
+			} else if s1[i] < s2[j] {
+				s3 = append(s3, s1[i])
+				currentMax = s1[i]
+				i++
+			} else {
+				s3 = append(s3, s2[j])
+				currentMax = s2[j]
+				j++
+			}
+		}
+
+		return s3
+	}
+	
 	// 26 Write a function `SumMatrix` that sums all elements in a 2D slice (matrix). Use nested loops: outer for rows, inner for columns, add each value.
 	// matrix [][]int
 
+func SumMatrix (matrix [][]int) int {
+	sez := 0
+	for _, seznam := range matrix {
+		for _, item := range seznam {
+			sez += item
+		} 
+	} 
 
+	return sez
+}
 
 	// 27 Write a function `MainDiagonal` that returns the main diagonal elements of a square matrix as a slice. Loop once using index `i` and append `matrix[i][i]`.
 	// matrix [][]int

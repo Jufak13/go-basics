@@ -987,3 +987,59 @@ func TestBubbleSort(t *testing.T) {
         })
     }
 }
+
+
+func TestMergeSorted(t *testing.T) {
+    tests := map[string]struct {
+        input1   []int
+        input2   []int
+        expected []int
+    }{
+        "success": {
+            input1:   []int{1, 2, 4, 6},
+            input2:   []int{3, 4, 5, 7},
+            expected: []int{1, 2, 3, 4, 5, 6, 7},
+        },
+        "success duplicates": {
+            input1:   []int{1, 2, 4, 6},
+            input2:   []int{3, 4, 5, 7, 7,},
+            expected: []int{1, 2, 3, 4, 5, 6, 7},
+        },
+    }
+
+    for name, test := range tests {
+        t.Run(name, func(t *testing.T) {
+            result := MergeSorted(test.input1, test.input2)
+            assert.Equal(t, test.expected, result)
+        })
+    }
+}
+
+func TestSumMatrix(t *testing.T) {
+    tests := map[string]struct {
+        input   [][]int
+        expected int
+    }{
+        "success": {
+            input:   [][]int{
+						{1, 2, 4, 6},
+						{3, 4, 5, 7},
+			},
+            expected: 32,
+        },
+        "success duplicates": {
+            input:   [][]int{
+						{1, 2, 4, 6},
+						{3, 4, 5, 7, 7, 8},
+			},
+            expected: 47,
+        },
+    }
+
+    for name, test := range tests {
+        t.Run(name, func(t *testing.T) {
+            result := SumMatrix(test.input)
+            assert.Equal(t, test.expected, result)
+        })
+    }
+}
