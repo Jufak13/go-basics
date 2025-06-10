@@ -713,6 +713,26 @@ func SumMatrix (matrix [][]int) int {
 
 	return sez
 }
+// 27 Write a function `MainDiagonal` that returns the main diagonal elements of a square matrix as a slice. Loop once using index `i` and append `matrix[i][i]`.
+// matrix [][]int
 
-	// 27 Write a function `MainDiagonal` that returns the main diagonal elements of a square matrix as a slice. Loop once using index `i` and append `matrix[i][i]`.
-	// matrix [][]int
+func MainDiagonal (matrix [][]int) []int {
+	out := []int{}
+	
+	for i := 0; i < len(matrix); i++ {
+		out = append(out, matrix[i][i])
+	}
+	
+	return out
+}
+
+// 28 Write a function `IsSymmetric` that checks if a square matrix is symmetric (`matrix[i][j] == matrix[j][i]`). Use nested loops and return false on first mismatch.
+// matrix [][]int
+
+// 29 Write a function `PrimesInRange` that returns all prime numbers between `start` and `end` inclusive. Loop each number and call `IsPrime` to test, appending primes.
+// start int
+// end int
+
+// 30 Write a function `Power` that computes `base` raised to `exponent` for non‑negative integers. Use a loop multiplying an accumulator and handle exponent zero with a conditional.
+// base int
+// exponent int
