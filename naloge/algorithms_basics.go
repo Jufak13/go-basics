@@ -1,6 +1,9 @@
 package naloge
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // 01 Return the smallest even number that appears more than once
 // Test cases:
@@ -105,13 +108,80 @@ func RepeatingPrimeNumbers(numbers []int) []int {
 //   []int{3, 3, 3, 3} => 3.0
 //   []int{5, 6, 7, 9, 11, 12} => 9.0
 
+
+// 1. preverim če je število iz seznama na lihem mestu v seznamu ter deljivo s 3 
+// 2. če je, potem ga dodam v seznam b
+// 3. ko grem čez celotni prvi seznam a, zračunam povprečje števil v seznamu b ter vrnem rezultat
+//
+//
+//
+
+func AverageOddThrees (numbers []int) (float64, error) { 
+	average := []int{}
+	result := 0
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("no matching values at odd indices")
+	}
+	for i, number := range numbers {
+		if i%2 != 0 && number%3 == 0 {
+			average = append(average, number)
+		}
+	} 
+	if len(average) == 0 {
+		return 0, fmt.Errorf("no matching values at odd indices")
+	}
+
+	for _, num := range average {
+		result += num
+	}
+	result = result/len(average)
+
+	return float64(result), nil
+}
+
 // 04 Return the number of unique values that are palindromes and odd
 // Test cases:
-//   []int{1, 3, 5, 7, 9, 11, 33, 44} => 6
+//   []int{1, 3, 5, 7, 9, 11, 33, 44} => 7
 //   []int{2, 4, 6, 8} => 0
 //   []int{121, 131, 141, 151} => 4
 //   []int{} => 0
 //   []int{1, 1, 1, 1} => 1
+
+// pali := strconv.Itoa(33)
+// pali = "33"
+// 1. Ustvarim nov seznam palindromes
+// 2. preverim iz seznama če je število liho
+// 3. če je, z funkcijo preverim oz. prepišem število v rikverc
+// 4. primerjam številki in če sta enaki, dodam številko v seznam palindromes
+// 5. na koncu seštejem koliko števil je v seznamu palindromes in vrnem rezultat
+
+func OddPalindromes (numbers []int) int {
+	palindromes := map[int]bool{} 
+
+	for _, number := range numbers {
+		if number%2 != 0 && number > 9 {
+			pali := strconv.Itoa(number)
+			new := ""
+			for i := len(pali) - 1; i >= 0; i-- {
+				new += string(pali[i])
+			}
+			if pali == new {
+				palindromes[number] = true
+			}
+		} else {
+			if number%2 != 0 && number <= 9 {
+				palindromes[number] = true
+			}
+		}
+	} 
+	
+	return len(palindromes)
+}
+
+
+
+
+
 
 // 05 Return the second largest value that appears more than once
 // Test cases:
@@ -120,6 +190,55 @@ func RepeatingPrimeNumbers(numbers []int) []int {
 //   []int{9, 9, 8, 8, 7, 7, 6, 6} => 8
 //   []int{} => "not enough repeating values"
 //   []int{2, 2, 2, 1, 1} => 1
+
+// 1. ustvarim seznam dvojniki
+// 2. preverim če je število dvojnik (grem čez seznam)
+// 3. dodam dvojnike v seznam
+// 4. razporedim svojnike naraščajoče (z algoritmom)
+// 5. vrnem predzadnji element kot rezultat
+
+func RepeatingSecondLargest (numbers []int) (int, error) {
+	dvojniki := map[int]int{}
+	seznam := []int{}
+
+
+	for _, number := range numbers {
+		dvojniki[number]++
+	}
+	for number, frequency := range dvojniki {
+		if frequency > 1 {
+			seznam = append(seznam, number)
+		}
+	}
+
+	if len(seznam) <2 {
+		return 0, fmt.Errorf("not enough repeating values")
+	}
+
+	var highest int
+	var secondHighest int
+
+	if seznam[0] > seznam[1] {
+		highest = seznam[0]
+		secondHighest = seznam[1]
+	} else {
+		secondHighest = seznam[0]
+		highest = seznam[1]
+	}
+
+	for _, number := range seznam[2:] {
+		if number > highest {
+			secondHighest = highest
+			highest = number
+		} else if number > secondHighest {
+			secondHighest = number
+		}
+	}
+
+	return secondHighest, nil
+}
+
+
 
 // 06 Return the longest increasing sub-slice from a list of integers
 // Test cases:
