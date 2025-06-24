@@ -2,6 +2,7 @@ package naloge
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -20,12 +21,12 @@ func SmallestRepeatingEven(numbers []int) (int, error) {
 			continue
 		}
 		_, ok := frequencies[number] // ok = true, če je number obstaja v mapu
-		if !ok {  // če ni v mapu dodaj key in vrednost 1
-			frequencies [number] = 1
+		if !ok {                     // če ni v mapu dodaj key in vrednost 1
+			frequencies[number] = 1
 		} else { // če je v mapu, prištej eno vrednosti key-a
 			frequencies[number]++
-		} 
-	} 
+		}
+	}
 	smallest := 0
 	overriden := false
 	for number, frequency := range frequencies {
@@ -56,7 +57,7 @@ func SmallestRepeatingEven(numbers []int) (int, error) {
 //   []int{} => []
 
 func RepeatingPrimeNumbers(numbers []int) []int {
-	primes := map[int]int{} 
+	primes := map[int]int{}
 	out := []int{}
 
 	for _, number := range numbers {
@@ -97,9 +98,6 @@ func RepeatingPrimeNumbers(numbers []int) []int {
 	return out
 }
 
-
-
-
 // 03 Return the average of all values that are at odd indices and divisible by 3
 // Test cases:
 //   []int{3, 6, 9, 12, 15, 18} => 12.0
@@ -108,15 +106,14 @@ func RepeatingPrimeNumbers(numbers []int) []int {
 //   []int{3, 3, 3, 3} => 3.0
 //   []int{5, 6, 7, 9, 11, 12} => 9.0
 
-
-// 1. preverim če je število iz seznama na lihem mestu v seznamu ter deljivo s 3 
+// 1. preverim če je število iz seznama na lihem mestu v seznamu ter deljivo s 3
 // 2. če je, potem ga dodam v seznam b
 // 3. ko grem čez celotni prvi seznam a, zračunam povprečje števil v seznamu b ter vrnem rezultat
 //
 //
 //
 
-func AverageOddThrees (numbers []int) (float64, error) { 
+func AverageOddThrees(numbers []int) (float64, error) {
 	average := []int{}
 	result := 0
 	if len(numbers) == 0 {
@@ -126,7 +123,7 @@ func AverageOddThrees (numbers []int) (float64, error) {
 		if i%2 != 0 && number%3 == 0 {
 			average = append(average, number)
 		}
-	} 
+	}
 	if len(average) == 0 {
 		return 0, fmt.Errorf("no matching values at odd indices")
 	}
@@ -134,7 +131,7 @@ func AverageOddThrees (numbers []int) (float64, error) {
 	for _, num := range average {
 		result += num
 	}
-	result = result/len(average)
+	result = result / len(average)
 
 	return float64(result), nil
 }
@@ -155,8 +152,8 @@ func AverageOddThrees (numbers []int) (float64, error) {
 // 4. primerjam številki in če sta enaki, dodam številko v seznam palindromes
 // 5. na koncu seštejem koliko števil je v seznamu palindromes in vrnem rezultat
 
-func OddPalindromes (numbers []int) int {
-	palindromes := map[int]bool{} 
+func OddPalindromes(numbers []int) int {
+	palindromes := map[int]bool{}
 
 	for _, number := range numbers {
 		if number%2 != 0 && number > 9 {
@@ -173,15 +170,10 @@ func OddPalindromes (numbers []int) int {
 				palindromes[number] = true
 			}
 		}
-	} 
-	
+	}
+
 	return len(palindromes)
 }
-
-
-
-
-
 
 // 05 Return the second largest value that appears more than once
 // Test cases:
@@ -197,10 +189,9 @@ func OddPalindromes (numbers []int) int {
 // 4. razporedim svojnike naraščajoče (z algoritmom)
 // 5. vrnem predzadnji element kot rezultat
 
-func RepeatingSecondLargest (numbers []int) (int, error) {
+func RepeatingSecondLargest(numbers []int) (int, error) {
 	dvojniki := map[int]int{}
 	seznam := []int{}
-
 
 	for _, number := range numbers {
 		dvojniki[number]++
@@ -211,7 +202,7 @@ func RepeatingSecondLargest (numbers []int) (int, error) {
 		}
 	}
 
-	if len(seznam) <2 {
+	if len(seznam) < 2 {
 		return 0, fmt.Errorf("not enough repeating values")
 	}
 
@@ -238,8 +229,6 @@ func RepeatingSecondLargest (numbers []int) (int, error) {
 	return secondHighest, nil
 }
 
-
-
 // 06 Return the longest increasing sub-slice from a list of integers
 // Test cases:
 //   []int{1, 2, 3, 2, 3, 4, 5} => [2 3 4 5]
@@ -247,6 +236,48 @@ func RepeatingSecondLargest (numbers []int) (int, error) {
 //   []int{} => "empty input"
 //   []int{1, 2, 1, 2, 3} => [1 2 3]
 //   []int{10} => [10]
+
+// 1. ustvaril bi 2 seznama.
+// 2. šel bi čez dani seznam in preverjal, če številke naraščajo po vrsti.
+// 3. če naraščajo, jih dodajam po vrsti v 1. seznam, dokler ne pridem do števila ki ne sledi zaporedju.
+// 4. ko pridem do števila ki ni v zaporedju, grem v nov loop kjer ponovim preverjanje in dodajam številke v 2. seznam
+// 5. ko pridem do števila ki ne sledi zaporedju preverim, če je len(2)>len(1), če je len(1) = len(2).
+// 6. nadaljujem preverjanje in dodajam števila v 2. seznam.
+// 7. ponavljam dokler ni konc seznama.
+// 8. vrnem 1. seznam
+
+func LongestIncreasingSubslice(numbers []int) ([]int, error) {
+	if len(numbers) < 1 {
+		return nil, fmt.Errorf("empty input")
+	}
+
+	seznam1 := []int{}
+	seznam2 := []int{numbers[0]}
+	num := numbers[0]
+
+	for _, number := range numbers[1:] {
+		if number > num {
+			seznam2 = append(seznam2, number)
+			num = number
+		} else {
+			if len(seznam2) > len(seznam1) {
+				seznam1 = seznam2
+				seznam2 = []int{number}
+				num = number
+			} else {
+				seznam2 = []int{number}
+				num = number
+			}
+		}
+
+	}
+
+	if len(seznam2) > len(seznam1) {
+		return seznam2, nil
+	}
+
+	return seznam1, nil
+}
 
 // 07 Return the product of all odd numbers that are also perfect squares
 // Test cases:
@@ -256,6 +287,45 @@ func RepeatingSecondLargest (numbers []int) (int, error) {
 //   []int{1, 1, 1} => 1
 //   []int{49, 36, 25} => 1225
 
+// 0. preverim če je prazen seznam
+// 0.1 ustvarim spremenljivko "rezultat = 0"
+// 1. grem čez seznam in preverjam število, če je liho
+// 2. če je, preverim, če je deljiva sama s seboj (perf square)
+// 3. prištejem k rezultatu
+// 4. vrnem rezultat
+// 5.
+// 6.
+// 7.
+// 8.
+// 9.
+// 10.
+
+func ProductOddPerfSquares(numbers []int) (int, error) {
+	if len(numbers) < 1 {
+		return 0, fmt.Errorf("no matching values")
+	}
+
+	rezultat := 1
+	found := false
+
+	for _, number := range numbers {
+		if number%2 != 0 {
+			rt := int(math.Sqrt(float64(number)))
+			if rt*rt == number {
+				rezultat *= number
+				found = true
+			}
+		}
+
+	}
+
+	if !found {
+		return 0, fmt.Errorf("no matching values")
+	}
+
+	return rezultat, nil
+}
+
 // 08 Return the first value that is both a multiple of 3 and appears exactly twice
 // Test cases:
 //   []int{3, 3, 6, 6, 9, 9} => 3
@@ -263,6 +333,42 @@ func RepeatingSecondLargest (numbers []int) (int, error) {
 //   []int{} => "no valid match found"
 //   []int{6, 6, 3, 3} => 6
 //   []int{12, 12, 15} => 12
+
+// 1. preverim če je seznam prazn in vrnem error če je
+// 2. naredim mapo
+// 3. preverim če je število deljivo z 3
+// 4. če je ga dodam v mapo in dodam counter
+// 5. ko zaključim preverjanje prvega seznama preverim v mapi katero število se prvo podvoji
+// 6. vrnem to število
+// 7.
+// 8.
+// 9.
+// 10.
+
+func FirstDoubleMultipleOfThree(numbers []int) (int, error) {
+	if len(numbers) < 1 {
+		return 0, fmt.Errorf("no valid match found")
+	}
+
+	frequencies := map[int]int{}
+
+	for _, number := range numbers {
+		frequencies[number]++
+	}
+
+	for _, number := range numbers {
+		if number %3 != 0 {
+			continue
+		}
+
+		value := frequencies[number]
+		if value == 2 {
+			return number, nil
+		}
+	}
+
+	return 0, fmt.Errorf("no valid match found")
+}
 
 // 09 From two slices, return all values that are odd and only appear in one of the slices
 // Test cases:
