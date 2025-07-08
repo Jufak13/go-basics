@@ -357,7 +357,7 @@ func FirstDoubleMultipleOfThree(numbers []int) (int, error) {
 	}
 
 	for _, number := range numbers {
-		if number %3 != 0 {
+		if number%3 != 0 {
 			continue
 		}
 
@@ -378,6 +378,35 @@ func FirstDoubleMultipleOfThree(numbers []int) (int, error) {
 //   A: [], B: [1, 2, 3] => [1 3]
 //   A: [7, 9], B: [] => [7 9]
 
+func OddOneSlice(SliceA []int, SliceB []int) []int {
+	if len(SliceA) < 1 && len(SliceB) < 1 {
+		return nil
+	}
+
+	frequencies := map[int]int{}
+	result := []int{}
+
+	for _, number := range SliceA {
+		if number%2 != 0 {
+			frequencies[number]++
+		}
+	}
+
+	for _, number := range SliceB {
+		if number%2 != 0 {
+			frequencies[number]++
+		}
+	}
+
+	for number, frequency := range frequencies {
+		if frequency == 1 {
+			result = append(result, number)
+		}
+	}
+
+	return result
+}
+
 // 10 Return the index of the smallest number that appears more than once and is a multiple of 5
 // Test cases:
 //   []int{10, 20, 10, 30, 20, 40} => 0
@@ -385,6 +414,49 @@ func FirstDoubleMultipleOfThree(numbers []int) (int, error) {
 //   []int{} => "no valid repeating multiple of 5"
 //   []int{5, 5, 10, 10} => 0
 //   []int{25, 30, 25, 30, 15, 15} => 4
+
+type Info struct {
+	Index int
+	Count int
+}
+
+func IndexSmallestMultipleOfFive(numbers []int) (int, error) {
+	result := make(map[int]Info)
+	stevila := []int{}
+	smallest := math.MaxInt64
+
+	for _, num := range numbers {
+		if num%5 == 0 {
+			stevila = append(stevila, num)
+		} else {
+			return 0, fmt.Errorf("no valid repeating multiple of 5")
+		}
+
+	}
+
+	for i, num := range stevila {
+		info, exists := result[num]
+		if exists {
+			info.Count++
+		} else {
+			info = Info{Index: i, Count: 1}
+		}
+		result[num] = info
+	}
+
+	for num, info := range result {
+		fmt.Printf("Number: %d, First Index: %d, Count: %d\n", num, info.Index, info.Count)
+	}
+
+	for key := range result {
+		if key < smallest {
+			smallest = key
+		}
+	}
+
+	return result[smallest].Index, nil
+
+}
 
 // 11 Return the value that occurs most frequently, but only if it is a perfect square
 // Test cases:
@@ -394,21 +466,135 @@ func FirstDoubleMultipleOfThree(numbers []int) (int, error) {
 //   []int{1, 1, 2, 2, 4, 4} => 1
 //   []int{25, 36, 25, 36} => 25
 
+func MostFrequentSquare(numbers []int) (int, error) {
+
+	frequencies := map[int]int{}
+	frekvenca := 0
+	result := 0
+
+	for _, num := range numbers {
+		rt := int(math.Sqrt(float64(num)))
+		if rt*rt == num {
+			frequencies[num]++
+		}
+	}
+
+	if len(frequencies) < 1 {
+		return 0, fmt.Errorf("no perfect square values")
+	}
+
+	for _, number := range numbers {
+		frequency, ok := frequencies[number]
+		if !ok {
+			continue
+		}
+		if frequency > frekvenca {
+			result = number
+			frekvenca = frequency
+		}
+	}
+
+	return result, nil
+
+}
+
 // 12 Return the number of distinct primes that divide at least two different numbers in the list
 // Test cases:
 //   []int{6, 10, 15} => 2       // 2 and 5 divide multiple
 //   []int{2, 3, 5, 7} => 0
-//   []int{4, 6, 8, 10} => 2     // 2 and maybe 5
+//   []int{4, 6, 8, 10} => 2     // 2
 //   []int{} => 0
 //   []int{9, 15, 21} => 1       // 3
 
-// 13 Return the sum of the two most frequent even numbers that are also divisible by 4
+func primes(num int) ([]int, error) {
+	out := []int{}
+	for i := 2; i <= num; i++ {
+
+		b, err := IsPrime(i)
+		if err != nil {
+			return nil, err
+		}
+		if b {
+			out = append(out, i)
+		}
+	}
+
+	return out, nil
+}
+
+func DistinctPrimesDivisors(numbers []int) (int, error) {
+	seen := map[int]int{}
+
+	for _, number := range numbers {
+		allPrimes, err := primes(number)
+		if err != nil {
+			return 0, err
+		}
+
+		for _, prime := range allPrimes {
+			if number%prime == 0 {
+				seen[prime]++
+			}
+		}
+	}
+
+	total := 0
+	for _, freq := range seen {
+		if freq >= 2 {
+			total++
+		}
+	}
+
+	return total, nil
+}
+
+// 13 Return the sum of the first two most frequent even numbers that are also divisible by 4
 // Test cases:
-//   []int{4, 4, 8, 8, 12, 12} => "not enough matching values"
+//   []int{4, 4, 8, 8, 12, 12} => 12
 //   []int{2, 6, 10} => "not enough matching values"
 //   []int{4, 4, 8} => "not enough matching values"
 //   []int{16, 16, 20, 20, 24} => 36
 //   []int{} => "not enough matching values"
+
+func SumFrequentEvenDivByFour(numbers []int) (int, error) {
+	frequencies := map[int]int{}
+	highestKey := 0
+	highestValue := 0
+	secondHighestKey := 0
+	secondHighestValue := 0
+
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("not enough matching values")
+	}
+
+	for _, number := range numbers {
+		if number%4 == 0 {
+			frequencies[number]++
+		}
+	}
+
+	if len(frequencies) <= 1 {
+		return 0, fmt.Errorf("not enough matching values")
+	}
+
+	for _, num := range numbers {
+		frequency, ok := frequencies[num]
+		if !ok || num == highestKey || num == secondHighestKey {
+			continue
+		}
+		if frequency > highestValue {
+			secondHighestKey = highestKey
+			secondHighestValue = highestValue
+			highestKey = num
+			highestValue = frequency
+		} else if frequency > secondHighestValue {
+			secondHighestKey = num
+			secondHighestValue = frequency
+		}
+	}
+
+	return highestKey + secondHighestKey, nil
+}
 
 // 14 Given a list of strings, return the shortest one that contains only digits and has no repeated characters
 // Test cases:

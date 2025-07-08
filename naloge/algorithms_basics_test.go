@@ -130,7 +130,6 @@ func TestAverageOddTrees(t *testing.T) {
 	}
 }
 
-
 func TestOddPalindromes(t *testing.T) {
 	tests := map[string]struct {
 		input    []int
@@ -166,7 +165,6 @@ func TestOddPalindromes(t *testing.T) {
 	}
 }
 
-
 func TestRepeatingSecondLargest(t *testing.T) {
 	tests := map[string]struct {
 		input       []int
@@ -182,11 +180,11 @@ func TestRepeatingSecondLargest(t *testing.T) {
 			errExpected: fmt.Errorf("not enough repeating values"),
 		},
 		"empty slice": {
-			input:       []int{9, 9, 8, 8, 7, 7, 6, 6},
+			input:    []int{9, 9, 8, 8, 7, 7, 6, 6},
 			expected: 8,
 		},
 		"another succes": {
-			input:    []int{},
+			input:       []int{},
 			errExpected: fmt.Errorf("not enough repeating values"),
 		},
 		"only one repeating value": {
@@ -211,7 +209,6 @@ func TestRepeatingSecondLargest(t *testing.T) {
 	}
 }
 
-
 func TestLongestIncreasingSubslice(t *testing.T) {
 	tests := map[string]struct {
 		input       []int
@@ -223,11 +220,11 @@ func TestLongestIncreasingSubslice(t *testing.T) {
 			expected: []int{2, 3, 4, 5},
 		},
 		"no repeating values": {
-			input:       []int{5, 4, 3, 2, 1},
+			input:    []int{5, 4, 3, 2, 1},
 			expected: []int{5},
 		},
 		"another succes": {
-			input:       []int{3, 4, 5, 2, 1, 3, 5, 7, 9, 10},
+			input:    []int{3, 4, 5, 2, 1, 3, 5, 7, 9, 10},
 			expected: []int{1, 3, 5, 7, 9, 10},
 		},
 		"empty slice": {
@@ -260,7 +257,6 @@ func TestLongestIncreasingSubslice(t *testing.T) {
 	}
 }
 
-
 func TestProductOddPerfSquares(t *testing.T) {
 	tests := map[string]struct {
 		input       []int
@@ -280,11 +276,11 @@ func TestProductOddPerfSquares(t *testing.T) {
 			errExpected: fmt.Errorf("no matching values"),
 		},
 		"repeating values": {
-			input:       []int{1, 1, 1},
+			input:    []int{1, 1, 1},
 			expected: 1,
 		},
 		"yet another succes": {
-			input:   []int{49, 36, 25},
+			input:    []int{49, 36, 25},
 			expected: 1225,
 		},
 	}
@@ -305,7 +301,6 @@ func TestProductOddPerfSquares(t *testing.T) {
 	}
 }
 
-
 func TestFirstDoubleMultipleOfThree(t *testing.T) {
 	tests := map[string]struct {
 		input       []int
@@ -325,11 +320,11 @@ func TestFirstDoubleMultipleOfThree(t *testing.T) {
 			errExpected: fmt.Errorf("no valid match found"),
 		},
 		"repeating values": {
-			input:       []int{6, 6, 3, 3},
+			input:    []int{6, 6, 3, 3},
 			expected: 6,
 		},
 		"yet another succes": {
-			input:   []int{12, 12, 15},
+			input:    []int{12, 12, 15},
 			expected: 12,
 		},
 	}
@@ -337,6 +332,227 @@ func TestFirstDoubleMultipleOfThree(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			actual, err := FirstDoubleMultipleOfThree(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestOddOneSlice(t *testing.T) {
+	tests := map[string]struct {
+		input    []int
+		input2	 []int
+		expected []int
+	}{
+		"succes": {
+			input:    []int{1, 2, 3},
+			input2:   []int{3, 4, 5},
+			expected: []int{1, 5},
+		},
+		"another succes": {
+			input:    []int{2, 4, 6},
+			input2:   []int{1, 3, 5},
+			expected: []int{1, 3, 5},
+		},
+		"double": {
+			input:    []int{1, 3},
+			input2:   []int{1, 3},
+			expected: []int{},
+		},
+		"first empty": {
+			input:    []int{},
+			input2:   []int{1, 3},
+			expected: []int{1, 3},
+		},
+		"second empty": {
+			input:    []int{7, 9},
+			input2:   []int{},
+			expected: []int{7, 9},
+		},
+	}
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			result := OddOneSlice(test.input, test.input2)
+			assert.ElementsMatch(t, test.expected, result)
+		})
+	}
+}
+
+
+func TestIndexSmallestMultipleOfFive(t *testing.T) {
+	tests := map[string]struct {
+		input       []int
+		expected    int
+		errExpected error
+	}{
+		"succes": {
+			input:    []int{10, 20, 10, 30, 20, 40},
+			expected: 0,
+		},
+		"no repeating values": {
+			input:       []int{1, 2, 3, 4},
+			errExpected: fmt.Errorf("no valid repeating multiple of 5"),
+		},
+		"empty slice": {
+			input:       []int{},
+			errExpected: fmt.Errorf("no valid repeating multiple of 5"),
+		},
+		"repeating values": {
+			input:    []int{5, 5, 10, 10},
+			expected: 0,
+		},
+		"yet another succes": {
+			input:    []int{25, 30, 25, 30, 15, 15},
+			expected: 4,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := IndexSmallestMultipleOfFive(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+
+func TestMostFrequentSquare(t *testing.T) {
+	tests := map[string]struct {
+		input       []int
+		expected    int
+		errExpected error
+	}{
+		"succes": {
+			input:    []int{4, 4, 9, 9, 9, 16},
+			expected: 9,
+		},
+		"no repeating values": {
+			input:       []int{2, 3, 5},
+			errExpected: fmt.Errorf("no perfect square values"),
+		},
+		"empty slice": {
+			input:       []int{},
+			errExpected: fmt.Errorf("no perfect square values"),
+		},
+		"repeating values": {
+			input:    []int{25, 36, 25, 36},
+			expected: 25,
+		},
+		"yet another succes": {
+			input:    []int{25, 30, 25, 30, 15, 15},
+			expected: 25,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := MostFrequentSquare(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+
+
+func TestDistinctPrimesDivisors(t *testing.T) {
+	tests := map[string]struct {
+		input       []int
+		expected    int
+		errExpected error
+	}{
+		"succes": {
+			input:    []int{6, 10, 15},
+			expected: 3,
+		},
+		"no repeating values": {
+			input:      []int{2, 3, 5, 7},
+			expected: 0,
+		},
+		"empty slice": {
+			input:       []int{4, 6, 15, 8, 10},
+			expected: 3,
+		},
+		"repeating values": {
+			input:    []int{},
+			expected: 0,
+		},
+		"yet another succes": {
+			input:    []int{9, 15, 21},
+			expected: 1,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := DistinctPrimesDivisors(test.input)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
+}
+
+
+func TestSumFrequentEvenDivByFour(t *testing.T) {
+	tests := map[string]struct {
+		input       []int
+		expected    int
+		errExpected error
+	}{
+		"succes1": {
+			input:    []int{4, 4, 8, 8, 12, 12},
+			expected: 12,
+		},
+		"no repeating values1": {
+			input:      []int{2, 6, 10},
+			errExpected: fmt.Errorf("not enough matching values"),
+		},
+		"another success": {
+			input:       []int{4, 4, 8},
+			expected: 12,
+		},
+		"empty slice1": {
+			input:    []int{},
+			errExpected: fmt.Errorf("not enough matching values"),
+		},
+		"yet another succes1": {
+			input:     []int{16, 16, 20, 20, 24},
+			expected: 36,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := SumFrequentEvenDivByFour(test.input)
 			if err != nil {
 				if test.errExpected != nil {
 					assert.ErrorContains(t, test.errExpected, err.Error())
