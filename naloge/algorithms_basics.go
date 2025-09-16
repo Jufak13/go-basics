@@ -680,21 +680,20 @@ func HowManySumToEven(numbers []int) int {
 	for _, num := range numbers {
 		if num%2 != 0 {
 			currentSum += num
-		} else if num %2 == 0 && currentSum != 0 && currentSum%2 == 0 {
-			 odds++
-			 currentSum = 0 
+		} else if num%2 == 0 && currentSum != 0 && currentSum%2 == 0 {
+			odds++
+			currentSum = 0
 		} else {
-			 currentSum = 0 
+			currentSum = 0
 		}
 
 	}
 	if currentSum != 0 && currentSum%2 == 0 {
-			 odds++ 
-		}
-
-		return odds
+		odds++
 	}
 
+	return odds
+}
 
 // 17 From a slice of strings, return the most common word after lowercasing and removing punctuation
 // Test cases:
@@ -705,31 +704,31 @@ func HowManySumToEven(numbers []int) int {
 //   ["What's", "what's", "Whats"] => "whats"
 
 func CommonLowercase(words []string) (string, error) {
-    if len(words) == 0 {
-        return "", fmt.Errorf("no input provided")
-    }
+	if len(words) == 0 {
+		return "", fmt.Errorf("no input provided")
+	}
 
-    specialChars := "!.,=?:<>*-+'"
-    frequencies := map[string]int{}
+	specialChars := "!.,=?:<>*-+'"
+	frequencies := map[string]int{}
 
-    for _, word := range words {
-        word := strings.ToLower(word)
-        for _, special := range specialChars {
-            word = strings.Replace(word, string(special), "", -1)
-        }
-        frequencies[word]++
-    }
+	for _, word := range words {
+		word := strings.ToLower(word)
+		for _, special := range specialChars {
+			word = strings.Replace(word, string(special), "", -1)
+		}
+		frequencies[word]++
+	}
 
-    count := 0
-    result := ""
+	count := 0
+	result := ""
 
-    for word, frequency := range frequencies {
-        if frequency > count {
-            count = frequency
-            result = word
-        }
-    }
-    return result, nil
+	for word, frequency := range frequencies {
+		if frequency > count {
+			count = frequency
+			result = word
+		}
+	}
+	return result, nil
 }
 
 // 18 From a slice of strings, return true if reversing all words and sorting gives the same as sorting and then reversing all
@@ -760,7 +759,7 @@ func SumUniquePrimes(numbers []int) (int, error) {
 	primeNumbers := allPrimesInSlice(numbers)
 
 	for _, num := range primeNumbers {
-		frequencies[num]++	
+		frequencies[num]++
 	}
 	for num, freq := range frequencies {
 		if freq == 1 {
@@ -768,10 +767,9 @@ func SumUniquePrimes(numbers []int) (int, error) {
 		}
 	}
 	return sum, nil
-	}
+}
 
-
-	func isPrime(n int) bool {
+func isPrime(n int) bool {
 
 	if n == 0 {
 		return false
@@ -783,25 +781,23 @@ func SumUniquePrimes(numbers []int) (int, error) {
 
 	for i := 2; i < (n/2)+1; i++ {
 		if n%i == 0 {
-			return false 
+			return false
 		}
 	}
 	return true
 }
 
+func allPrimesInSlice(arr []int) []int {
+	out := []int{}
 
-	func allPrimesInSlice(arr []int) []int{
-		out := []int{}
-
-		for _, item := range arr {
-			if isPrime(item) {
-				out = append(out, item)
-			}
+	for _, item := range arr {
+		if isPrime(item) {
+			out = append(out, item)
 		}
-
-		return out
 	}
 
+	return out
+}
 
 // 20 From a list of strings, return all that are palindromes after removing non-letter characters and lowercasing
 // Test cases:
@@ -811,6 +807,28 @@ func SumUniquePrimes(numbers []int) (int, error) {
 //   ["No 'x' in Nixon"] => ["No 'x' in Nixon"]
 //   ["Madam!", "madam", "MaDaM"] => ["Madam!", "madam", "MaDaM"]
 
+func OnlyLettersPalindromes(words []string) []string {
+	if len(words) == 0 {
+		return []string{}
+	}
+
+	palindromes := []string{}
+	specialChars := " !.,=?:<>*-+'"
+
+	for _, word := range words {
+		LowWord := strings.ToLower(word)
+		for _, special := range specialChars {
+			LowWord = strings.Replace(LowWord, string(special), "", -1)
+		}
+		if IsPalindrome(LowWord) {
+			palindromes = append(palindromes, word)
+		}
+	}
+
+	return palindromes
+
+}
+
 // 21 Compute the average of all even non-negative numbers, rounded down.
 // Test cases:
 //   []int{2, 4, -1, -3, 6, 7} => 4
@@ -819,6 +837,31 @@ func SumUniquePrimes(numbers []int) (int, error) {
 //   []int{-10, -20, -30} => "no even values"
 //   []int{10, 20, 30} => 20
 
+func NonNegativeAverage(numbers []int) (int, error) {
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("no even values")
+	}
+
+	sum := 0
+	counter := 0
+
+	for _, num := range numbers {
+		if num > 0 && num%2 == 0 {
+			sum += num
+			counter += 1
+		}
+	}
+
+	if sum == 0 || counter == 0 {
+		return 0, fmt.Errorf("no even values")
+	}
+
+	average := sum / counter
+
+	return average, nil
+
+}
+
 // 22 Return the longest string that starts and ends with the same letter (case-insensitive).
 // Test cases:
 //   []string{"Anna", "civic", "", "racecar", "apple"} => "racecar"
@@ -826,6 +869,31 @@ func SumUniquePrimes(numbers []int) (int, error) {
 //   []string{} => "no valid word found"
 //   []string{"level", "stats", "bob"} => "stats"
 //   []string{"wow", "deed", "deed"} => "deed"
+
+func LongestStringStartEndSameLetter(words []string) (string, error) {
+	longest := ""
+
+	if len(words) == 0 {
+		return "", fmt.Errorf("no valid word found")
+	}
+
+	for _, word := range words {
+		runes := []rune(word)
+		if len(runes) == 0 {
+			continue
+		}
+
+				if strings.ToLower(string(runes[0])) == strings.ToLower(string(runes[len(runes)-1])) {
+			if len([]rune(word)) >= len([]rune(longest)) {
+				longest = word
+			}
+		}
+	}
+
+	
+	return longest, nil
+	
+}
 
 // 23 Filter out all numbers less than or equal to 10.
 // Find the smallest and largest of the remaining numbers.
@@ -837,6 +905,46 @@ func SumUniquePrimes(numbers []int) (int, error) {
 //   []int{10, 20, 30} => 1
 //   []int{50, 100, 70, 85} => 1
 
+func HowManyBetweenSmallAndHigh(numbers []int) (int, error) {
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("not enough values")
+	}
+
+	NewList := []int{}
+	smallest := 0
+	highest := 0
+
+	for _, num := range numbers {
+		if num > 10 {
+			NewList = append(NewList, num)
+		}
+	}
+
+	for i, newnumber := range NewList {
+		if newnumber < NewList[smallest] {
+			smallest = i
+		}
+		if newnumber > NewList[highest] {
+			highest = i
+		}
+	}
+
+	distance := highest - smallest
+	if distance < 0 {
+		distance = -distance
+
+	}
+
+	NumbersInbetween := distance - 1
+
+	if NumbersInbetween < 0 {
+		NumbersInbetween = 0
+	}
+
+	return NumbersInbetween, nil
+
+}
+
 // 24 Return a list of strings that appear only once sorted by length.
 // Test cases:
 //   []string{"a", "bb", "ccc", "a", "bb", "dddd"} => ["ccc" "dddd"]
@@ -844,6 +952,14 @@ func SumUniquePrimes(numbers []int) (int, error) {
 //   []string{} => []
 //   []string{"one", "two", "three"} => ["one" "two" "three"]
 //   []string{"a", "ab", "abc", "ab", "abc"} => ["a"]
+
+// 1. nardim mapo
+// 2. dodajam v mapo stringe in jim dam vrednost kolkrat se pojavjo
+// 3. nardim seznam z stringi k se samo enkrat pojavjo
+// 4. grem čez seznam in ga razvrstim po velikosti (uporabim funcBubbleSort)
+// 5. vrnem seznam
+
+ func UniqueStringsByLength(words []string) ([]string, error)
 
 // 25 Remove all non-positive numbers.
 // Count how many digits each number has.
