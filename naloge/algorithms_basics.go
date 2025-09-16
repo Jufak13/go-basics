@@ -5,6 +5,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"sort"
 )
 
 // 01 Return the smallest even number that appears more than once
@@ -883,16 +884,15 @@ func LongestStringStartEndSameLetter(words []string) (string, error) {
 			continue
 		}
 
-				if strings.ToLower(string(runes[0])) == strings.ToLower(string(runes[len(runes)-1])) {
+		if strings.ToLower(string(runes[0])) == strings.ToLower(string(runes[len(runes)-1])) {
 			if len([]rune(word)) >= len([]rune(longest)) {
 				longest = word
 			}
 		}
 	}
 
-	
 	return longest, nil
-	
+
 }
 
 // 23 Filter out all numbers less than or equal to 10.
@@ -959,7 +959,29 @@ func HowManyBetweenSmallAndHigh(numbers []int) (int, error) {
 // 4. grem čez seznam in ga razvrstim po velikosti (uporabim funcBubbleSort)
 // 5. vrnem seznam
 
- func UniqueStringsByLength(words []string) ([]string, error)
+func UniqueStringsByLength(words []string) []string {
+	frequencies := map[string]int{}
+	unique := []string{}
+
+	if len(words) == 0 {
+		return []string{}
+	}
+
+	for _, word := range words {
+		frequencies[word]++
+	}
+
+	for word, frequency := range frequencies {
+		if frequency == 1 {
+			unique = append(unique, word)
+		}
+	}
+
+	sort.Strings(unique)
+
+	return unique
+
+}
 
 // 25 Remove all non-positive numbers.
 // Count how many digits each number has.
