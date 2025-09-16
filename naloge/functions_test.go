@@ -598,8 +598,8 @@ func TestFibonacci(t *testing.T) {
 			expected: []int{0},
 		},
 		"0": {
-			input:    0,
-			expected: nil,
+			input:       0,
+			expected:    nil,
 			errExpected: fmt.Errorf("invalid n"),
 		},
 		"10": {
@@ -663,7 +663,6 @@ func TestSumDigits(t *testing.T) {
 	}
 }
 
-
 func TestIsArmstrong(t *testing.T) {
 	tests := map[string]struct {
 		input       int
@@ -675,8 +674,8 @@ func TestIsArmstrong(t *testing.T) {
 			expected: true,
 		},
 		"4 digit number": {
-			input:       1634,
-			expected:    true,
+			input:    1634,
+			expected: true,
 		},
 		"non-armstrong 3 digit": {
 			input:    123,
@@ -705,23 +704,22 @@ func TestIsArmstrong(t *testing.T) {
 	}
 }
 
-
 func TestMultiplicationTable(t *testing.T) {
 	tests := map[string]struct {
 		input       int
-		input2		int
+		input2      int
 		expected    []int
 		errExpected error
 	}{
 		"od 1 do 10": {
 			input:    3,
-			input2:		 10,
+			input2:   10,
 			expected: []int{3, 6, 9, 12, 15, 18, 21, 24, 27, 30},
 		},
 		"poljubno": {
-			input:       2,
-			input2: 	4,
-			expected:    []int{2, 4, 6, 8},
+			input:    2,
+			input2:   4,
+			expected: []int{2, 4, 6, 8},
 		},
 	}
 
@@ -742,334 +740,329 @@ func TestMultiplicationTable(t *testing.T) {
 	}
 }
 
-
 func TestCountSubstring(t *testing.T) {
 	tests := map[string]struct {
-		input       string
-		input2		string
-		expected    int
+		input    string
+		input2   string
+		expected int
 	}{
 		"primer malica": {
 			input:    "Malica",
-			input2:		 "li",
+			input2:   "li",
 			expected: 1,
 		},
 		"primer Ananas": {
-			input:       "Ananas",
-			input2: 	"a",
-			expected:    2,
+			input:    "Ananas",
+			input2:   "a",
+			expected: 2,
 		},
 		"primer Rolada": {
-			input:       "Rolada",
-			input2: 	"Role",
-			expected:    0,
+			input:    "Rolada",
+			input2:   "Role",
+			expected: 0,
 		},
 	}
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			actual := CountSubstring(test.input, test.input2)
-				assert.Equal(t, test.expected, actual)
+			assert.Equal(t, test.expected, actual)
 		})
 	}
 }
 
 func TestGCD(t *testing.T) {
-    tests := map[string]struct {
-        a           int
-        b           int
-        expected    int
-        errExpected error
-    }{
-        "21": {
-            a:        252,
-            b:        105,
-            expected: 21,
-        },
-        "common divisor": {
-            a:        48,
-            b:        18,
-            expected: 6,
-        },
-        "one divides the other": {
-            a:        100,
-            b:        25,
-            expected: 25,
-        },
-        "co-primes": {
-            a:        7,
-            b:        3,
-            expected: 1,
-        },
-        "zero b – should error": {
-            a:           42,
-            b:           0,
-            errExpected: fmt.Errorf("število2 cannot be zero"),
-        },
-        "both zero – should error": {
-            a:           0,
-            b:           0,
-            errExpected: fmt.Errorf("število2 cannot be zero"),
-        },
-        "negative input": {
-            a:        -8,
-            b:        12,
-            expected: 4,
-        },
-        "larger numbers": {
-            a:        270,
-            b:        192,
-            expected: 6,
-        },
-    }
+	tests := map[string]struct {
+		a           int
+		b           int
+		expected    int
+		errExpected error
+	}{
+		"21": {
+			a:        252,
+			b:        105,
+			expected: 21,
+		},
+		"common divisor": {
+			a:        48,
+			b:        18,
+			expected: 6,
+		},
+		"one divides the other": {
+			a:        100,
+			b:        25,
+			expected: 25,
+		},
+		"co-primes": {
+			a:        7,
+			b:        3,
+			expected: 1,
+		},
+		"zero b – should error": {
+			a:           42,
+			b:           0,
+			errExpected: fmt.Errorf("število2 cannot be zero"),
+		},
+		"both zero – should error": {
+			a:           0,
+			b:           0,
+			errExpected: fmt.Errorf("število2 cannot be zero"),
+		},
+		"negative input": {
+			a:        -8,
+			b:        12,
+			expected: 4,
+		},
+		"larger numbers": {
+			a:        270,
+			b:        192,
+			expected: 6,
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            actual, err := GCD(test.a, test.b)
-            if err != nil {
-                if test.errExpected != nil {
-                    assert.ErrorContains(t, test.errExpected, err.Error())
-                } else {
-                    assert.NoError(t, err)
-                }
-            } else {
-                assert.Equal(t, test.expected, actual)
-            }
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := GCD(test.a, test.b)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
 }
-
 
 func TestLCM(t *testing.T) {
-    tests := map[string]struct {
-        a           int
-        b           int
-        expected    int
-        errExpected error
-    }{
-        "basic LCM": {
-            a:        4,
-            b:        6,
-            expected: 12,
-        },
-        "same number": {
-            a:        7,
-            b:        7,
-            expected: 7,
-        },
-        "one is multiple of other": {
-            a:        3,
-            b:        9,
-            expected: 9,
-        },
-        "co-primes": {
-            a:        5,
-            b:        7,
-            expected: 35,
-        },
-        "zero input – should error": {
-            a:           0,
-            b:           5,
-            errExpected: fmt.Errorf("število2 cannot be zero"),
-        },
-        "both zero – should error": {
-            a:           0,
-            b:           0,
-            errExpected: fmt.Errorf("število2 cannot be zero"),
-        },
-        "negative input": {
-            a:        -4,
-            b:        6,
-            expected: 12,
-        },
-        "large numbers": {
-            a:        21,
-            b:        6,
-            expected: 42,
-        },
-    }
+	tests := map[string]struct {
+		a           int
+		b           int
+		expected    int
+		errExpected error
+	}{
+		"basic LCM": {
+			a:        4,
+			b:        6,
+			expected: 12,
+		},
+		"same number": {
+			a:        7,
+			b:        7,
+			expected: 7,
+		},
+		"one is multiple of other": {
+			a:        3,
+			b:        9,
+			expected: 9,
+		},
+		"co-primes": {
+			a:        5,
+			b:        7,
+			expected: 35,
+		},
+		"zero input – should error": {
+			a:           0,
+			b:           5,
+			errExpected: fmt.Errorf("število2 cannot be zero"),
+		},
+		"both zero – should error": {
+			a:           0,
+			b:           0,
+			errExpected: fmt.Errorf("število2 cannot be zero"),
+		},
+		"negative input": {
+			a:        -4,
+			b:        6,
+			expected: 12,
+		},
+		"large numbers": {
+			a:        21,
+			b:        6,
+			expected: 42,
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            actual, err := LCM(test.a, test.b)
-            if err != nil {
-                if test.errExpected != nil {
-                    assert.ErrorContains(t, test.errExpected, err.Error())
-                } else {
-                    assert.NoError(t, err)
-                }
-            } else {
-                assert.Equal(t, test.expected, actual)
-            }
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual, err := LCM(test.a, test.b)
+			if err != nil {
+				if test.errExpected != nil {
+					assert.ErrorContains(t, test.errExpected, err.Error())
+				} else {
+					assert.NoError(t, err)
+				}
+			} else {
+				assert.Equal(t, test.expected, actual)
+			}
+		})
+	}
 }
 
-
 func TestUniqueInts(t *testing.T) {
-    tests := map[string]struct {
-        input    []int
-        expected []int
-    }{
-        "no duplicates": {
-            input:    []int{1, 2, 3, 4},
-            expected: []int{1, 2, 3, 4},
-        },
-        "some duplicates": {
-            input:    []int{1, 2, 2, 3, 1, 4},
-            expected: []int{1, 2, 3, 4},
-        },
-        "all duplicates": {
-            input:    []int{5, 5, 5, 5},
-            expected: []int{5},
-        },
-        "empty list": {
-            input:    []int{},
-            expected: []int{},
-        },
-        "already unique but out of order": {
-            input:    []int{9, 7, 3, 1},
-            expected: []int{9, 7, 3, 1},
-        },
-        "negative and positive mix": {
-            input:    []int{-1, 2, -1, 2, 0},
-            expected: []int{-1, 2, 0},
-        },
-    }
+	tests := map[string]struct {
+		input    []int
+		expected []int
+	}{
+		"no duplicates": {
+			input:    []int{1, 2, 3, 4},
+			expected: []int{1, 2, 3, 4},
+		},
+		"some duplicates": {
+			input:    []int{1, 2, 2, 3, 1, 4},
+			expected: []int{1, 2, 3, 4},
+		},
+		"all duplicates": {
+			input:    []int{5, 5, 5, 5},
+			expected: []int{5},
+		},
+		"empty list": {
+			input:    []int{},
+			expected: []int{},
+		},
+		"already unique but out of order": {
+			input:    []int{9, 7, 3, 1},
+			expected: []int{9, 7, 3, 1},
+		},
+		"negative and positive mix": {
+			input:    []int{-1, 2, -1, 2, 0},
+			expected: []int{-1, 2, 0},
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            result := UniqueInts(test.input)
-            assert.Equal(t, test.expected, result)
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			result := UniqueInts(test.input)
+			assert.Equal(t, test.expected, result)
+		})
+	}
 }
 
 func TestBubbleSort(t *testing.T) {
-    tests := map[string]struct {
-        input    []int
-        expected []int
-    }{
-        "already sorted": {
-            input:    []int{1, 2, 3, 4, 5},
-            expected: []int{1, 2, 3, 4, 5},
-        },
-        "reverse sorted": {
-            input:    []int{5, 4, 3, 2, 1},
-            expected: []int{1, 2, 3, 4, 5},
-        },
-        "random order with duplicates": {
-            input:    []int{3, 1, 4, 5, 9, 2},
-            expected: []int{1, 2, 3, 4, 5, 9},
-        },
-        "empty slice": {
-            input:    []int{},
-            expected: []int{},
-        },
-        "single element": {
-            input:    []int{7},
-            expected: []int{7},
-        },
-        "all same values": {
-            input:    []int{2, 2, 2, 2},
-            expected: []int{2, 2, 2, 2},
-        },
-        "negatives and positives": {
-            input:    []int{-1, 3, -2, 0, 5},
-            expected: []int{-2, -1, 0, 3, 5},
-        },
-    }
+	tests := map[string]struct {
+		input    []int
+		expected []int
+	}{
+		"already sorted": {
+			input:    []int{1, 2, 3, 4, 5},
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		"reverse sorted": {
+			input:    []int{5, 4, 3, 2, 1},
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		"random order with duplicates": {
+			input:    []int{3, 1, 4, 5, 9, 2},
+			expected: []int{1, 2, 3, 4, 5, 9},
+		},
+		"empty slice": {
+			input:    []int{},
+			expected: []int{},
+		},
+		"single element": {
+			input:    []int{7},
+			expected: []int{7},
+		},
+		"all same values": {
+			input:    []int{2, 2, 2, 2},
+			expected: []int{2, 2, 2, 2},
+		},
+		"negatives and positives": {
+			input:    []int{-1, 3, -2, 0, 5},
+			expected: []int{-2, -1, 0, 3, 5},
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            result := BubbleSort(test.input)
-            assert.Equal(t, test.expected, result)
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			result := BubbleSort(test.input)
+			assert.Equal(t, test.expected, result)
+		})
+	}
 }
 
-
 func TestMergeSorted(t *testing.T) {
-    tests := map[string]struct {
-        input1   []int
-        input2   []int
-        expected []int
-    }{
-        "success": {
-            input1:   []int{1, 2, 4, 6},
-            input2:   []int{3, 4, 5, 7},
-            expected: []int{1, 2, 3, 4, 5, 6, 7},
-        },
-        "success duplicates": {
-            input1:   []int{1, 2, 4, 6},
-            input2:   []int{3, 4, 5, 7, 7,},
-            expected: []int{1, 2, 3, 4, 5, 6, 7},
-        },
-    }
+	tests := map[string]struct {
+		input1   []int
+		input2   []int
+		expected []int
+	}{
+		"success": {
+			input1:   []int{1, 2, 4, 6},
+			input2:   []int{3, 4, 5, 7},
+			expected: []int{1, 2, 3, 4, 5, 6, 7},
+		},
+		"success duplicates": {
+			input1:   []int{1, 2, 4, 6},
+			input2:   []int{3, 4, 5, 7, 7},
+			expected: []int{1, 2, 3, 4, 5, 6, 7},
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            result := MergeSorted(test.input1, test.input2)
-            assert.Equal(t, test.expected, result)
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			result := MergeSorted(test.input1, test.input2)
+			assert.Equal(t, test.expected, result)
+		})
+	}
 }
 
 func TestSumMatrix(t *testing.T) {
-    tests := map[string]struct {
-        input   [][]int
-        expected int
-    }{
-        "success": {
-            input:   [][]int{
-						{1, 2, 4, 6},
-						{3, 4, 5, 7},
+	tests := map[string]struct {
+		input    [][]int
+		expected int
+	}{
+		"success": {
+			input: [][]int{
+				{1, 2, 4, 6},
+				{3, 4, 5, 7},
 			},
-            expected: 32,
-        },
-        "success duplicates": {
-            input:   [][]int{
-						{1, 2, 4, 6},
-						{3, 4, 5, 7, 7, 8},
+			expected: 32,
+		},
+		"success duplicates": {
+			input: [][]int{
+				{1, 2, 4, 6},
+				{3, 4, 5, 7, 7, 8},
 			},
-            expected: 47,
-        },
-    }
+			expected: 47,
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            result := SumMatrix(test.input)
-            assert.Equal(t, test.expected, result)
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			result := SumMatrix(test.input)
+			assert.Equal(t, test.expected, result)
+		})
+	}
 }
 
-
 func TestMainDiagonal(t *testing.T) {
-    tests := map[string]struct {
-        input   [][]int
-        expected []int
-    }{
-        "success": {
-            input:   [][]int{
-						{1, 2, 4, 6},
-						{3, 4, 5, 7},
+	tests := map[string]struct {
+		input    [][]int
+		expected []int
+	}{
+		"success": {
+			input: [][]int{
+				{1, 2, 4, 6},
+				{3, 4, 5, 7},
 			},
-            expected: []int{1, 4},
-        },
-        "success duplicates": {
-            input:   [][]int{
-						{2, 2, 4, 6},
-						{3, 7, 5, 7, 7, 8},
+			expected: []int{1, 4},
+		},
+		"success duplicates": {
+			input: [][]int{
+				{2, 2, 4, 6},
+				{3, 7, 5, 7, 7, 8},
 			},
-            expected: []int{2, 7},
-        },
-    }
+			expected: []int{2, 7},
+		},
+	}
 
-    for name, test := range tests {
-        t.Run(name, func(t *testing.T) {
-            result := MainDiagonal(test.input)
-            assert.Equal(t, test.expected, result)
-        })
-    }
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			result := MainDiagonal(test.input)
+			assert.Equal(t, test.expected, result)
+		})
+	}
 }

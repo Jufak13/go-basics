@@ -3,9 +3,9 @@ package naloge
 import (
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
-	"sort"
 )
 
 // 01 Return the smallest even number that appears more than once
@@ -715,7 +715,7 @@ func CommonLowercase(words []string) (string, error) {
 	for _, word := range words {
 		word := strings.ToLower(word)
 		for _, special := range specialChars {
-			word = strings.Replace(word, string(special), "", -1)
+			word = strings.ReplaceAll(word, string(special), "")
 		}
 		frequencies[word]++
 	}
@@ -819,7 +819,7 @@ func OnlyLettersPalindromes(words []string) []string {
 	for _, word := range words {
 		LowWord := strings.ToLower(word)
 		for _, special := range specialChars {
-			LowWord = strings.Replace(LowWord, string(special), "", -1)
+			LowWord = strings.ReplaceAll(LowWord, string(special), "")
 		}
 		if IsPalindrome(LowWord) {
 			palindromes = append(palindromes, word)
@@ -884,7 +884,7 @@ func LongestStringStartEndSameLetter(words []string) (string, error) {
 			continue
 		}
 
-		if strings.ToLower(string(runes[0])) == strings.ToLower(string(runes[len(runes)-1])) {
+		if strings.EqualFold(string(runes[0]), string(runes[len(runes)-1])) {
 			if len([]rune(word)) >= len([]rune(longest)) {
 				longest = word
 			}
@@ -992,6 +992,14 @@ func UniqueStringsByLength(words []string) []string {
 //   []int{1000, 10000, 100000} => 5
 //   []int{} => "no positive numbers"
 //   []int{7, 88, 9, 101, 5} => 1
+
+// 1. grem čez seznam pa odstranm vse ngative
+// 2.
+//
+//
+//
+//
+//
 
 // 26 From a list of integers, collect all values divisible by 3.
 // From those, remove all values that are also divisible by 5.
