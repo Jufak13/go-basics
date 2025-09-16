@@ -3,7 +3,9 @@ package naloge
 import (
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
+	"strings"
 )
 
 // 01 Return the smallest even number that appears more than once
@@ -601,8 +603,56 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []string{"123", "112", "789", "56"} => "56"
 //   []string{"abc", "999", "111"} => "no valid string found"
 //   []string{} => "no valid string found"
-//   []string{"9876", "1234", "88"} => "88"
+//   []string{"9876", "1234", "88"} => "1234"
 //   []string{"9", "98", "987"} => "9"
+
+// 0. ustvarim Return = nil
+// 1. najprej bi preveru če string vsebuje črke, če jih takoj preskočim oz. zaključim, vrnem error
+// 2. Če string vsebuje samo števila preverim, če se v stringu števila ponavljajo, če se preskočim na naslednji string
+// 3. če se števila ne ponavljajo preverim če je ta string krajši od stringa ki ga trenutno vračam
+// 4. če je manjši ali pa če je return = nil, zamenjam string z nil oz. tistim k je bil prej
+// 5. vrnem Return
+
+func ShortestUniqueDigit(strings []string) (string, error) {
+	errInvalid := fmt.Errorf("no valid string found")
+	if len(strings) == 0 {
+		return "", errInvalid
+	}
+
+	shortest := ""
+
+	for _, s := range strings {
+		isNumeric := true
+		isRepeating := false
+		freq := map[int]int{}
+
+		for _, char := range s {
+			currentNum, err := strconv.Atoi(string(char))
+			if err != nil {
+				isNumeric = false
+				break
+			}
+
+			freq[currentNum]++
+			if freq[currentNum] > 1 {
+				isRepeating = true
+				break
+			}
+		}
+		if !isNumeric || isRepeating {
+			continue
+		}
+		if len(shortest) == 0 || len(s) <= len(shortest) {
+			shortest = s
+		}
+	}
+
+	if len(shortest) > 0 {
+		return shortest, nil
+	}
+
+	return "", nil
+}
 
 // 15 From a list of numbers, return the average of all values that:
 // Test cases:
@@ -614,11 +664,37 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 
 // 16 Count how many groups of consecutive odd numbers sum to an even number
 // Test cases:
-//   []int{1, 3, 5, 2, 7, 9, 11} => 2      // [1 3 5] = 9 (odd), [7 9 11] = 27 (odd), skip; no even
-//   []int{1, 3, 2, 5, 7, 2, 9, 11} => 1   // [5 7] = 12 (even)
+//   []int{1, 3, 5, 2, 7, 9, 11} => 0      // [1 3 5] = 9 (odd), [7 9 11] = 27 (odd), skip; no even
+//   []int{1, 3, 2, 5, 7, 2, 9, 11} => 3   // [5 7] = 12 (even)
 //   []int{} => 0
 //   []int{2, 4, 6} => 0
-//   []int{1, 3, 5, 7} => 0
+//   []int{1, 3, 5, 7} => 1
+
+func HowManySumToEven(numbers []int) int {
+	if len(numbers) == 0 {
+		return 0
+	}
+
+	odds := 0
+	currentSum := 0
+
+	for _, num := range numbers {
+		if num%2 != 0 {
+			currentSum += num
+		} else if num%2 == 0 && currentSum != 0 && currentSum%2 == 0 {
+			odds++
+			currentSum = 0
+		} else {
+			currentSum = 0
+		}
+
+	}
+	if currentSum != 0 && currentSum%2 == 0 {
+		odds++
+	}
+
+	return odds
+}
 
 // 17 From a slice of strings, return the most common word after lowercasing and removing punctuation
 // Test cases:
@@ -627,6 +703,34 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   ["Yes?", "yes!", "YES", "no"] => "yes"
 //   ["One", "Two", "Two", "Three."] => "two"
 //   ["What's", "what's", "Whats"] => "whats"
+
+func CommonLowercase(words []string) (string, error) {
+	if len(words) == 0 {
+		return "", fmt.Errorf("no input provided")
+	}
+
+	specialChars := "!.,=?:<>*-+'"
+	frequencies := map[string]int{}
+
+	for _, word := range words {
+		word := strings.ToLower(word)
+		for _, special := range specialChars {
+			word = strings.ReplaceAll(word, string(special), "")
+		}
+		frequencies[word]++
+	}
+
+	count := 0
+	result := ""
+
+	for word, frequency := range frequencies {
+		if frequency > count {
+			count = frequency
+			result = word
+		}
+	}
+	return result, nil
+}
 
 // 18 From a slice of strings, return true if reversing all words and sorting gives the same as sorting and then reversing all
 // Test cases:
@@ -644,6 +748,58 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []int{13, 15, 17, 13} => 17
 //   []int{1, 2, 3, 4} => "no qualifying values"
 
+func SumUniquePrimes(numbers []int) (int, error) {
+
+	frequencies := map[int]int{}
+
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("no qualifying values")
+	}
+
+	sum := 0
+	primeNumbers := allPrimesInSlice(numbers)
+
+	for _, num := range primeNumbers {
+		frequencies[num]++
+	}
+	for num, freq := range frequencies {
+		if freq == 1 {
+			sum += num
+		}
+	}
+	return sum, nil
+}
+
+func isPrime(n int) bool {
+
+	if n == 0 {
+		return false
+	}
+
+	if n == 1 {
+		return false
+	}
+
+	for i := 2; i < (n/2)+1; i++ {
+		if n%i == 0 {
+			return false
+		}
+	}
+	return true
+}
+
+func allPrimesInSlice(arr []int) []int {
+	out := []int{}
+
+	for _, item := range arr {
+		if isPrime(item) {
+			out = append(out, item)
+		}
+	}
+
+	return out
+}
+
 // 20 From a list of strings, return all that are palindromes after removing non-letter characters and lowercasing
 // Test cases:
 //   ["A man, a plan, a canal: Panama", "Racecar", "hello"] => ["A man, a plan, a canal: Panama", "Racecar"]
@@ -651,6 +807,28 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   [] => []
 //   ["No 'x' in Nixon"] => ["No 'x' in Nixon"]
 //   ["Madam!", "madam", "MaDaM"] => ["Madam!", "madam", "MaDaM"]
+
+func OnlyLettersPalindromes(words []string) []string {
+	if len(words) == 0 {
+		return []string{}
+	}
+
+	palindromes := []string{}
+	specialChars := " !.,=?:<>*-+'"
+
+	for _, word := range words {
+		LowWord := strings.ToLower(word)
+		for _, special := range specialChars {
+			LowWord = strings.ReplaceAll(LowWord, string(special), "")
+		}
+		if IsPalindrome(LowWord) {
+			palindromes = append(palindromes, word)
+		}
+	}
+
+	return palindromes
+
+}
 
 // 21 Compute the average of all even non-negative numbers, rounded down.
 // Test cases:
@@ -660,6 +838,31 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []int{-10, -20, -30} => "no even values"
 //   []int{10, 20, 30} => 20
 
+func NonNegativeAverage(numbers []int) (int, error) {
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("no even values")
+	}
+
+	sum := 0
+	counter := 0
+
+	for _, num := range numbers {
+		if num > 0 && num%2 == 0 {
+			sum += num
+			counter += 1
+		}
+	}
+
+	if sum == 0 || counter == 0 {
+		return 0, fmt.Errorf("no even values")
+	}
+
+	average := sum / counter
+
+	return average, nil
+
+}
+
 // 22 Return the longest string that starts and ends with the same letter (case-insensitive).
 // Test cases:
 //   []string{"Anna", "civic", "", "racecar", "apple"} => "racecar"
@@ -667,6 +870,30 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []string{} => "no valid word found"
 //   []string{"level", "stats", "bob"} => "stats"
 //   []string{"wow", "deed", "deed"} => "deed"
+
+func LongestStringStartEndSameLetter(words []string) (string, error) {
+	longest := ""
+
+	if len(words) == 0 {
+		return "", fmt.Errorf("no valid word found")
+	}
+
+	for _, word := range words {
+		runes := []rune(word)
+		if len(runes) == 0 {
+			continue
+		}
+
+		if strings.EqualFold(string(runes[0]), string(runes[len(runes)-1])) {
+			if len([]rune(word)) >= len([]rune(longest)) {
+				longest = word
+			}
+		}
+	}
+
+	return longest, nil
+
+}
 
 // 23 Filter out all numbers less than or equal to 10.
 // Find the smallest and largest of the remaining numbers.
@@ -678,6 +905,46 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []int{10, 20, 30} => 1
 //   []int{50, 100, 70, 85} => 1
 
+func HowManyBetweenSmallAndHigh(numbers []int) (int, error) {
+	if len(numbers) == 0 {
+		return 0, fmt.Errorf("not enough values")
+	}
+
+	NewList := []int{}
+	smallest := 0
+	highest := 0
+
+	for _, num := range numbers {
+		if num > 10 {
+			NewList = append(NewList, num)
+		}
+	}
+
+	for i, newnumber := range NewList {
+		if newnumber < NewList[smallest] {
+			smallest = i
+		}
+		if newnumber > NewList[highest] {
+			highest = i
+		}
+	}
+
+	distance := highest - smallest
+	if distance < 0 {
+		distance = -distance
+
+	}
+
+	NumbersInbetween := distance - 1
+
+	if NumbersInbetween < 0 {
+		NumbersInbetween = 0
+	}
+
+	return NumbersInbetween, nil
+
+}
+
 // 24 Return a list of strings that appear only once sorted by length.
 // Test cases:
 //   []string{"a", "bb", "ccc", "a", "bb", "dddd"} => ["ccc" "dddd"]
@@ -685,6 +952,36 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []string{} => []
 //   []string{"one", "two", "three"} => ["one" "two" "three"]
 //   []string{"a", "ab", "abc", "ab", "abc"} => ["a"]
+
+// 1. nardim mapo
+// 2. dodajam v mapo stringe in jim dam vrednost kolkrat se pojavjo
+// 3. nardim seznam z stringi k se samo enkrat pojavjo
+// 4. grem čez seznam in ga razvrstim po velikosti (uporabim funcBubbleSort)
+// 5. vrnem seznam
+
+func UniqueStringsByLength(words []string) []string {
+	frequencies := map[string]int{}
+	unique := []string{}
+
+	if len(words) == 0 {
+		return []string{}
+	}
+
+	for _, word := range words {
+		frequencies[word]++
+	}
+
+	for word, frequency := range frequencies {
+		if frequency == 1 {
+			unique = append(unique, word)
+		}
+	}
+
+	sort.Strings(unique)
+
+	return unique
+
+}
 
 // 25 Remove all non-positive numbers.
 // Count how many digits each number has.
@@ -695,6 +992,14 @@ func SumFrequentEvenDivByFour(numbers []int) (int, error) {
 //   []int{1000, 10000, 100000} => 5
 //   []int{} => "no positive numbers"
 //   []int{7, 88, 9, 101, 5} => 1
+
+// 1. grem čez seznam pa odstranm vse ngative
+// 2.
+//
+//
+//
+//
+//
 
 // 26 From a list of integers, collect all values divisible by 3.
 // From those, remove all values that are also divisible by 5.

@@ -324,8 +324,8 @@ func NalogeIzLoops() {
 
 	fib := []int{ab, ba}
 
-	for i:=1;i<=10;i++ {
-		fib = append(fib, fib[len(fib)-2] + fib[len(fib)-1])
+	for i := 1; i <= 10; i++ {
+		fib = append(fib, fib[len(fib)-2]+fib[len(fib)-1])
 	}
 	fmt.Println(fib)
 

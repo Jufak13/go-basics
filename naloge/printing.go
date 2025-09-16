@@ -54,18 +54,16 @@ func NalogeIzPrintanja() {
 
 	opinion := "Go is boring"
 
-		if opinion == "Go is boring" {
-			opinion = "Go is awesome"
-		}
+	if opinion == "Go is boring" {
+		opinion = "Go is awesome"
+	}
 
 	fmt.Println(opinion)
 
 	originalString := "Go is boring"
-    replacedString := strings.Replace(originalString, "boring", "awesome", -1)
+	replacedString := strings.ReplaceAll(originalString, "boring", "awesome")
 
-    fmt.Println(replacedString)
-
-
+	fmt.Println(replacedString)
 
 	// 6. Format Output
 	// Task: Format and print a sentence like:
@@ -78,24 +76,24 @@ func NalogeIzPrintanja() {
 	age := 23
 	country := "Serbia"
 
-	fmt.Printf("Name: %s, | Age: %d, | Country: %s\n", name, age, country,)
+	fmt.Printf("Name: %s, | Age: %d, | Country: %s\n", name, age, country)
 
 	// 7. Print Special Characters
-    // Instruction: Print a sentence with quotation marks and a line break
+	// Instruction: Print a sentence with quotation marks and a line break
 
 	fmt.Printf("%q, %s, %s\n", "quote", "se uporablja k quotaš", "\\")
 
-    // 8: Combine Multiple Variables into a Sentence
-    // Instruction: Use several string variables to make and print a sentence.
-    // a := "The"
-    // b := "sky"
-    // c := "is"
-    // d := "blue"
+	// 8: Combine Multiple Variables into a Sentence
+	// Instruction: Use several string variables to make and print a sentence.
+	// a := "The"
+	// b := "sky"
+	// c := "is"
+	// d := "blue"
 
 	a := "The"
-    b := "sky"
-    c := "is"
-    d := "blue"
+	b := "sky"
+	c := "is"
+	d := "blue"
 
 	fmt.Printf("%s %s %s %s\n", a, b, c, d)
 

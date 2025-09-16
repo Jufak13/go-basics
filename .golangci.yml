@@ -1,0 +1,35 @@
+version: "2"
+run:
+  tests: true
+linters:
+  enable:
+    - revive
+  settings:
+    revive:
+      severity: warning
+      rules:
+        - name: indent-error-flow
+        - name: errorf
+        - name: blank-imports
+        - name: empty-block
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - revive
+          - staticcheck
+        path: _generated\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - _generated\.go
